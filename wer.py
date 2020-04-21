@@ -81,7 +81,7 @@ def alignedPrint(list, r, h, result):
                 if list[j] == "d":
                     count += 1
             index = i - count
-            print(" "*(len(h[index])), end=" ")
+            print("***"*(len(h[index])), end=" ")
         elif list[i] == "s":
             count1 = 0
             for j in range(i):
@@ -94,7 +94,7 @@ def alignedPrint(list, r, h, result):
                     count2 += 1
             index2 = i - count2
             if len(r[index1]) < len(h[index2]):
-                print(r[index1] + " " * (len(h[index2])-len(r[index1])), end=" ")
+                print(r[index1] + "***" * (len(h[index2])-len(r[index1])), end=" ")
             else:
                 print(r[index1], end=" "),
         else:
@@ -112,7 +112,7 @@ def alignedPrint(list, r, h, result):
                 if list[j] == "i":
                     count += 1
             index = i - count
-            print(" " * (len(r[index])), end=" ")
+            print("***" * (len(r[index])), end=" ")
         elif list[i] == "s":
             count1 = 0
             for j in range(i):
@@ -125,7 +125,7 @@ def alignedPrint(list, r, h, result):
                     count2 += 1
             index2 = i - count2
             if len(r[index1]) > len(h[index2]):
-                print(h[index2] + " " * (len(r[index1])-len(h[index2])), end=" ")
+                print(h[index2] + "***" * (len(r[index1])-len(h[index2])), end=" ")
             else:
                 print(h[index2], end=" ")
         else:
@@ -172,7 +172,7 @@ def alignedPrint(list, r, h, result):
                 if list[j] == "i":
                     count += 1
             index = i - count
-            print(" " * (len(r[index])), end=" ")
+            print("C" * (len(r[index])), end=" ")
     print("\nWER: " + result)
 
 def wer(r, h):
@@ -192,10 +192,18 @@ def wer(r, h):
     alignedPrint(list, r, h, result)
 
 if __name__ == '__main__':
-    filename1 = sys.argv[1]
-    filename2 = sys.argv[2]
+    # filename1 = sys.argv[1]
+    filename1 = 'ref.txt'
+    # filename2 = sys.argv[2]
+    filename2 = 'hyp.txt'
     with open(filename1, 'r', encoding="utf8") as ref:
-        r = ref.read().split()
+        r = ref.readlines()
     with open(filename2, 'r', encoding="utf8") as hyp:
-        h = hyp.read().split()
-    wer(r, h)   
+        h = hyp.readlines()
+    for i in range(len(r)):
+        # print(r[i])
+        name_r, txt_r = r[i].strip('\n').split('\t', 1)
+        name_h, txt_h = h[i].strip('\n').split('\t', 1)
+        assert name_h == name_r
+        print(name_r)
+        wer(txt_r, txt_h)
