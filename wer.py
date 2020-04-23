@@ -174,6 +174,7 @@ def alignedPrint(list, r, h, result):
             index = i - count
             print("C" * (len(r[index])), end=" ")
     print("\nWER: " + result)
+    # return result
 
 def wer(r, h):
     """
@@ -188,22 +189,42 @@ def wer(r, h):
 
     # print the result in aligned way
     result = float(d[len(r)][len(h)]) / len(r) * 100
+    res = "%.2f" % result
     result = str("%.2f" % result) + "%"
     alignedPrint(list, r, h, result)
+    return res
 
 if __name__ == '__main__':
     # filename1 = sys.argv[1]
-    filename1 = 'ref.txt'
+    filename1 = '/home/adalla/206/阿里vs硅基/trans_v2.txt'
     # filename2 = sys.argv[2]
-    filename2 = 'hyp.txt'
+    filename2 = '/home/adalla/206/阿里vs硅基/kaldi_v2.txt'
+
+    # with open(filename1, 'r', encoding="utf8") as ref:
+    #     r = ref.read().split()
+    # with open(filename2, 'r', encoding="utf8") as hyp:
+    #     h = hyp.read().split()
+    # wer(r, h)
+
+
+
     with open(filename1, 'r', encoding="utf8") as ref:
         r = ref.readlines()
     with open(filename2, 'r', encoding="utf8") as hyp:
         h = hyp.readlines()
+    count = 0
+    res_list = []
     for i in range(len(r)):
         # print(r[i])
-        name_r, txt_r = r[i].strip('\n').split('\t', 1)
-        name_h, txt_h = h[i].strip('\n').split('\t', 1)
+        name_r, txt_r = r[i].strip('\n').split(' ', 1)
+        name_h, txt_h = h[i].strip('\n').split(' ', 1)
         assert name_h == name_r
         print(name_r)
-        wer(txt_r, txt_h)
+        res = wer(txt_r, txt_h)
+        res_list.append(float(res))
+        count += 1
+        # print(res_list)
+        # print((sum(res_list)))
+    print("=====================================")
+    print('WER: ', sum(res_list)/len(res_list))
+
